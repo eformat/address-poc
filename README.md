@@ -24,22 +24,22 @@ Data Set based on Australia - G-NAF - Geoscape Geocoded National Address File (G
 
 `import.sql` - has 2500 records of test data.
 
-## Different search data
+## Showcases
 
-Two search example page showcases completion searching as you enter text:
-- `addresses` is a single address table with multiple address data fields as provided in the gnaf data dump.
-
-We use graphql to prevent over fetching of result data.
+- graphql search to prevent over fetching of result data.
+- elastic index templates for common settings
+- elastic ingest pipeline for creating concatenated addresses field (address.address)
+- low and high level rest client for searching and index manipulation (hibernate client is too slow at scale)
+- hibernate massindexer for db -> index easyness
+- uses simple json templates in /resources for creating/searching stuff, rather than complex java types (that you can cut and paste into the dev elastic console for example)
 
 ![dropdown-search.png](images/dropdown-search.png)
 
-## Test data
+## REST Api
 
-Bump up indexer for larger batches
-```java
-  searchSession.massIndexer()
-    .batchSizeToLoadObjects(100000)
-```
+Manually index from database, bump up indexer for larger batches using the
+
+![massindex.png](images/massindex.png)
 
 If using large `import.sql`, turn on transactions for whole of file, top and tail with
 ```bash
@@ -58,13 +58,17 @@ quarkus.hibernate-search-orm.schema-management.strategy=none
 
 ![grapql-index.png](images/graphql-index.png)
 
-## Clone the Index
-
-API's added for demoing the cloning of an index created by hibernate, and switching read/write alias to the new index.
+Clone the index
 
 Here we clone `oneaddress-000002` to `oneaddress-000003`
 ![index-clone.png](images/index-clone.png)
 
-Using the API's. `swtich`changes the read and write alias so search application can work on new index.
-![index-apis.png](images/index-apis.png)
+and switching read/write alias to the new index.
 
+![switch-index.png](images/switch-index.png)
+
+Use the dev console in kibana or es endpoint to check:
+```bash
+GET _cat/indices?h=index&s=index
+GET _cat/aliases
+```
