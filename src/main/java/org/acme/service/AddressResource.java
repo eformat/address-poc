@@ -65,7 +65,10 @@ public class AddressResource {
         String queryJson;
         if (search == null || search.isEmpty()) {
             JsonObject matchAll = new JsonObject().put("match_all", new JsonObject());
-            queryJson = matchAll.encode();
+            JsonObject query = new JsonObject().put("query", matchAll);
+            _addJson(query, "suggest.address.prefix", "");
+            _addJson(query, "suggest.address.completion.field", "address_suggest");
+            queryJson = query.encode();
         } else {
             queryJson = _readFile("/query-suggest-match.json");
             JsonObject qJson = new JsonObject(queryJson);
