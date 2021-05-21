@@ -104,15 +104,15 @@ public class AddressResource {
                 .getJsonArray("options");
 
         HashSet<Address> uniqueList = new HashSet<>();
-        for (int i = 0; i < matches.size(); i++) {
-            JsonObject hit = matches.getJsonObject(i);
-            Address address = hit.getJsonObject("_source").mapTo(Address.class);
-            float score = hit.getFloat("_score");
-            address.setScore(BigDecimal.valueOf(score));
-            uniqueList.add(address);
-        }
         for (int i = 0; i < suggestions.size(); i++) {
             JsonObject hit = suggestions.getJsonObject(i);
+            Address address = hit.getJsonObject("_source").mapTo(Address.class);
+            float score = hit.getFloat("_score");
+            address.setScore(BigDecimal.valueOf(score * 100)); // artificially boost suggestions, they are always scored 1
+            uniqueList.add(address);
+        }
+        for (int i = 0; i < matches.size(); i++) {
+            JsonObject hit = matches.getJsonObject(i);
             Address address = hit.getJsonObject("_source").mapTo(Address.class);
             float score = hit.getFloat("_score");
             address.setScore(BigDecimal.valueOf(score));

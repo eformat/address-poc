@@ -145,18 +145,21 @@ public class Main {
         }
         // delete and recreate
         RestHighLevelClient restHighLevelClient = new RestHighLevelClient(builder);
+        String recreateIndex = System.getProperty("index.recreate");
         try {
             AcknowledgedResponse pipelineReponse = restHighLevelClient.ingest().putPipeline(pipelineRequest, RequestOptions.DEFAULT);
             assert pipelineReponse.isAcknowledged();
             AcknowledgedResponse templateResponse = restHighLevelClient.indices().putTemplate(addressTemplate, RequestOptions.DEFAULT);
             assert templateResponse.isAcknowledged();
-            try {
-                restHighLevelClient.indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
-            } catch (Exception e) {
-                // fine
+            if (recreateIndex != null && recreateIndex.equalsIgnoreCase("true")) {
+                try {
+                    restHighLevelClient.indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
+                } catch (Exception e) {
+                    // fine
+                }
+                CreateIndexResponse createIndexResponse = restHighLevelClient.indices().create(createIndexRequest, RequestOptions.DEFAULT);
+                assert createIndexResponse.isAcknowledged();
             }
-            CreateIndexResponse createIndexResponse = restHighLevelClient.indices().create(createIndexRequest, RequestOptions.DEFAULT);
-            assert createIndexResponse.isAcknowledged();
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Couldn't connect to the elasticsearch server to create necessary templates. Ensure the Elasticsearch user has permissions to create templates.");

@@ -137,7 +137,7 @@ public class Address extends PanacheEntity implements Comparable {
             return false;
         }
         Address other = (Address) o;
-        return Objects.equals(id, other.id);
+        return address.equals(other.address);
     }
 
     @Override
@@ -147,5 +147,10 @@ public class Address extends PanacheEntity implements Comparable {
         }
         Address other = (Address) o;
         return this.score.compareTo(other.score);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
     }
 }
