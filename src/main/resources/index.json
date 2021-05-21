@@ -161,7 +161,7 @@
       "is_write_index": true
     },
     "address-read" : {
-      "is_write_index": true
+      "is_write_index": false
     }
   }
 }
