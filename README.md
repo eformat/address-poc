@@ -26,8 +26,7 @@ Data Set based on Australia - G-NAF - Geoscape Geocoded National Address File (G
 
 ## Different search data
 
-Two search example pages showcasing different search apis for realtime completion searching as you enter text:
-- `oneaddress` is a single address table and single address field. Using elastic match() and completer suggestion based search. 
+Two search example page showcases completion searching as you enter text:
 - `addresses` is a single address table with multiple address data fields as provided in the gnaf data dump.
 
 We use graphql to prevent over fetching of result data.
