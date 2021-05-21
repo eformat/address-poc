@@ -1,0 +1,10 @@
+{
+  "description": "Create addresses caters for units/flats/shops",
+  "processors": [
+    {
+      "script": {
+        "source": "\n          ctx['address'] = (ctx['flat_type'] == null) ?          \n                         (ctx['number_first'] == null ? '' : ctx['number_first']) + ' ' + ctx['street_name'] + ' ' + ctx['street_type_code'] + ' ' + ctx ['locality_sort']\n                         : ctx['flat_type'] + ' ' + ctx['flat_number'] + '/' + (ctx['number_first'] == null ? '' : ctx['number_first']) + ' ' + ctx['street_name'] + ' ' + ctx['street_type_code'] + ' ' + ctx ['locality_sort'];\n        "
+      }
+    }
+  ]
+}

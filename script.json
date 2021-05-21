@@ -1,0 +1,286 @@
+GET _cat/indices?h=index&s=index
+GET _cat/aliases
+
+
+DELETE address-000001
+PUT address-000001?include_type_name=true
+{
+  "settings": {
+      "analysis": {
+        "filter": {
+          "ngram": {
+            "type": "ngram",
+            "min_gram": "2",
+            "max_gram": "6"
+          }
+        },
+        "normalizer": {
+          "sort": {
+            "filter": [
+              "asciifolding",
+              "lowercase"
+            ],
+            "type": "custom"
+          }
+        },
+        "analyzer": {
+          "number": {
+            "filter": [
+              "asciifolding",
+              "lowercase"
+            ],
+            "type": "custom",
+            "tokenizer": "standard"
+          },
+          "flatType": {
+            "filter": [
+              "asciifolding",
+              "lowercase"
+            ],
+            "type": "custom",
+            "tokenizer": "standard"
+          },
+          "streetType": {
+            "filter": [
+              "asciifolding",
+              "lowercase"
+            ],
+            "type": "custom",
+            "tokenizer": "standard"
+          },
+          "address": {
+            "filter": [
+              "asciifolding",
+              "lowercase",
+              "ngram"
+            ],
+            "type": "custom",
+            "tokenizer": "whitespace"
+          },
+          "flat": {
+            "filter": [
+              "asciifolding",
+              "lowercase"
+            ],
+            "type": "custom",
+            "tokenizer": "standard"
+          },
+          "suburb": {
+            "filter": [
+              "asciifolding",
+              "lowercase",
+              "ngram"
+            ],
+            "type": "custom",
+            "tokenizer": "standard"
+          },
+          "location": {
+            "filter": [
+              "asciifolding",
+              "lowercase",
+              "ngram"
+            ],
+            "type": "custom",
+            "tokenizer": "standard"
+          },
+          "whitespace": {
+            "filter": [
+              "asciifolding",
+              "lowercase"
+            ],
+            "type": "custom",
+            "tokenizer": "whitespace"
+          }
+        }
+      }
+  },
+  "mappings": {
+    "_doc": {
+      "dynamic": "true",
+      "properties": {
+        "_entity_type": {
+          "type": "keyword",
+          "index": false
+        },
+        "address": {
+          "type": "text",
+          "analyzer": "address"
+        },
+        "address_suggest": {
+          "type": "completion",
+          "analyzer": "whitespace",
+          "preserve_separators": true,
+          "preserve_position_increments": true,
+          "max_input_length": 50
+        },         
+        "flat_number": {
+          "type": "text",
+          "analyzer": "flat"
+        },
+        "flat_number_sort": {
+          "type": "keyword",
+          "normalizer": "sort"
+        },
+        "flat_type": {
+          "type": "text",
+          "analyzer": "flatType"
+        },
+        "flat_type_sort": {
+          "type": "keyword",
+          "normalizer": "sort"
+        },
+        "locality_name": {
+          "type": "text",
+          "analyzer": "suburb"
+        },
+        "locality_sort": {
+          "type": "keyword",
+          "normalizer": "sort"
+        },
+        "number_first": {
+          "type": "text",
+          "analyzer": "number"
+        },
+        "number_first_sort": {
+          "type": "keyword",
+          "normalizer": "sort"
+        },
+        "street_name": {
+          "type": "text",
+          "analyzer": "location"
+        },
+        "street_name_sort": {
+          "type": "keyword",
+          "normalizer": "sort"
+        },
+        "street_type_code": {
+          "type": "text",
+          "analyzer": "streetType"
+        },
+        "street_type_sort": {
+          "type": "keyword",
+          "doc_values": false
+        }
+      }
+    }
+  }
+}
+
+POST /_aliases
+{
+  "actions": [
+    {
+      "add": {
+        "index": "address-000001",
+        "alias": "address-write",
+        "is_write_index": true
+      }
+    },
+    {
+      "add": {
+        "index": "address-000001",
+        "alias": "address-read",
+        "is_write_index": false
+      }
+    }
+  ]
+}
+
+DELETE /oneaddress-000001/_alias/address-read
+
+POST /_aliases
+{
+  "actions": [
+    {
+      "add": {
+        "index": "oneaddress-000001",
+        "alias": "oneaddress-write",
+        "is_write_index": true
+      }
+    },
+    {
+      "add": {
+        "index": "oneaddress-000001",
+        "alias": "oneaddress-read",
+        "is_write_index": false
+      }
+    }
+  ]
+}
+
+
+
+POST _reindex
+{
+  "source": {
+    "index": "address-000001"
+  },
+  "dest": {
+    "index": "address-000002",
+    "pipeline": "concat2"
+  }
+}
+
+GET address-000001/_search
+{
+    "size": 20,
+    "query": {
+        "match_all": {}
+    }
+}
+
+
+
+
+DELETE concat_address_example
+
+PUT _ingest/pipeline/concat
+{
+  "processors": [
+    {
+      "set": {
+        "field": "address",
+        "value": "{{flat_number_sort}} {{flat_number}}/{{number_first}} {{street_name}} {{street_type_code}} {{locality_sort}}"
+      }
+    }
+  ]
+}
+
+
+
+PUT _ingest/pipeline/concat2
+{
+  "description": "Create addresses caters for units/flats/shops",
+  "processors": [
+    {
+      "script": {
+        "source": """
+          ctx['address'] = (ctx['flat_type'] == null) ?          
+                         (ctx['number_first'] == null ? '' : ctx['number_first']) + ' ' + ctx['street_name'] + ' ' + ctx['street_type_code'] + ' ' + ctx ['locality_sort']
+                         : ctx['flat_type'] + ' ' + ctx['flat_number'] + '/' + (ctx['number_first'] == null ? '' : ctx['number_first']) + ' ' + ctx['street_name'] + ' ' + ctx['street_type_code'] + ' ' + ctx ['locality_sort'];
+        """
+      }
+    }
+  ]
+}
+
+
+
+POST concat_address_example/_bulk?pipeline=concat2
+{"index":{}}
+{"flat_number" : null,"flat_number_sort" : null,"locality_name" : "ROCHEDALE SOUTH","locality_sort" : "ROCHEDALE SOUTH","number_first" : "1","number_first_sort" : "1","street_name" : "FRANKLIN","street_name_sort" : "FRANKLIN","street_type_code" : "STREET","street_type_sort" : "STREET","_entity_type" : "Address"}
+{"index":{}}
+{"flat_number" : 1,"flat_number_sort" : "UNIT","locality_name" : "ROCHEDALE SOUTH","locality_sort" : "ROCHEDALE SOUTH","number_first" : "1","number_first_sort" : "1","street_name" : "FRANKLIN","street_name_sort" : "FRANKLIN","street_type_code" : "STREET","street_type_sort" : "STREET","_entity_type" : "Address"}
+{"index":{}}
+{"flat_number" : 2,"flat_number_sort" : "UNIT","locality_name" : "ROCHEDALE SOUTH","locality_sort" : "ROCHEDALE SOUTH","number_first" : "1","number_first_sort" : "1","street_name" : "FRANKLIN","street_name_sort" : "FRANKLIN","street_type_code" : "STREET","street_type_sort" : "STREET","_entity_type" : "Address"}
+{"index":{}}
+{"flat_number" : 3,"flat_number_sort" : "UNIT","locality_name" : "ROCHEDALE SOUTH","locality_sort" : "ROCHEDALE SOUTH","number_first" : "1","number_first_sort" : "1","street_name" : "FRANKLIN","street_name_sort" : "FRANKLIN","street_type_code" : "STREET","street_type_sort" : "STREET","_entity_type" : "Address"}
+
+GET concat_address_example/_search
+{
+    "query": {
+        "match_all": {}
+    }
+}
+
+

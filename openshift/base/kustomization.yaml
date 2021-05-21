@@ -1,0 +1,7 @@
+resources:
+- namespace.yaml
+- create-elastic-operator.yaml
+- elastic-cr.yaml
+- kibana-cr.yaml
+- routes.yaml
+

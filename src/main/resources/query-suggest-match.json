@@ -1,0 +1,24 @@
+{
+  "size": 10,
+  "query": {
+    "match": {
+      "address": {
+        "query": "23 crank street"
+      }
+    }
+  },
+  "sort": [
+    "_score"
+  ],
+  "_source": [
+    "*"
+  ],
+  "suggest": {
+    "address": {
+      "prefix": "23 crank street",
+      "completion": {
+        "field": "address_suggest"
+      }
+    }
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        "ngram": {
+          "type": "ngram",
+          "min_gram": "2",
+          "max_gram": "6"
+        }
+      },
+      "normalizer": {
+        "sort": {
+          "filter": [
+            "asciifolding",
+            "lowercase"
+          ],
+          "type": "custom"
+        }
+      },
+      "analyzer": {
+        "number": {
+          "filter": [
+            "asciifolding",
+            "lowercase"
+          ],
+          "type": "custom",
+          "tokenizer": "standard"
+        },
+        "flatType": {
+          "filter": [
+            "asciifolding",
+            "lowercase"
+          ],
+          "type": "custom",
+          "tokenizer": "standard"
+        },
+        "streetType": {
+          "filter": [
+            "asciifolding",
+            "lowercase"
+          ],
+          "type": "custom",
+          "tokenizer": "standard"
+        },
+        "address": {
+          "filter": [
+            "asciifolding",
+            "lowercase",
+            "ngram"
+          ],
+          "type": "custom",
+          "tokenizer": "whitespace"
+        },
+        "flat": {
+          "filter": [
+            "asciifolding",
+            "lowercase"
+          ],
+          "type": "custom",
+          "tokenizer": "standard"
+        },
+        "suburb": {
+          "filter": [
+            "asciifolding",
+            "lowercase",
+            "ngram"
+          ],
+          "type": "custom",
+          "tokenizer": "standard"
+        },
+        "location": {
+          "filter": [
+            "asciifolding",
+            "lowercase",
+            "ngram"
+          ],
+          "type": "custom",
+          "tokenizer": "standard"
+        },
+        "whitespace": {
+          "filter": [
+            "asciifolding",
+            "lowercase"
+          ],
+          "type": "custom",
+          "tokenizer": "whitespace"
+        }
+      }
+    }
+  },
+  "mappings": {
+      "dynamic": "true",
+      "properties": {
+        "_entity_type": {
+          "type": "keyword",
+          "index": false
+        },
+        "address": {
+          "type": "text",
+          "analyzer": "address"
+        },
+        "address_suggest": {
+          "type": "completion",
+          "analyzer": "whitespace",
+          "preserve_separators": true,
+          "preserve_position_increments": true,
+          "max_input_length": 50
+        },
+        "flat_number": {
+          "type": "text",
+          "analyzer": "flat"
+        },
+        "flat_number_sort": {
+          "type": "keyword",
+          "normalizer": "sort"
+        },
+        "flat_type": {
+          "type": "text",
+          "analyzer": "flatType"
+        },
+        "flat_type_sort": {
+          "type": "keyword",
+          "normalizer": "sort"
+        },
+        "locality_name": {
+          "type": "text",
+          "analyzer": "suburb"
+        },
+        "locality_sort": {
+          "type": "keyword",
+          "normalizer": "sort"
+        },
+        "number_first": {
+          "type": "text",
+          "analyzer": "number"
+        },
+        "number_first_sort": {
+          "type": "keyword",
+          "normalizer": "sort"
+        },
+        "street_name": {
+          "type": "text",
+          "analyzer": "location"
+        },
+        "street_name_sort": {
+          "type": "keyword",
+          "normalizer": "sort"
+        },
+        "street_type_code": {
+          "type": "text",
+          "analyzer": "streetType"
+        },
+        "street_type_sort": {
+          "type": "keyword",
+          "doc_values": false
+        }
+      }
+  },
+  "aliases" : {
+    "address-write" : {
+      "is_write_index": true
+    },
+    "address-read" : {
+      "is_write_index": true
+    }
+  }
+}

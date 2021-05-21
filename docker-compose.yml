@@ -1,0 +1,28 @@
+version: "3"
+services:
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+    ports:
+      - 9200:9200
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.12.0
+    container_name: kibana
+    ports:
+      - '5601:5601'
+    depends_on:
+      - 'elasticsearch'
+
+  postgresql:
+    image: postgres:10.5
+    environment:
+      POSTGRES_USER: "quarkus_test"
+      POSTGRES_PASSWORD: "quarkus_test"
+      POSTGRES_DB: "quarkus_test"
+    ports:
+      - "5432:5432"
+

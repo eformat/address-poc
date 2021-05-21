@@ -1,0 +1,25 @@
+---
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: address
+  namespace: address-graphql
+spec:
+  count: 1
+  elasticsearchRef:
+    name: address
+  version: 7.12.1
+  podTemplate:
+    metadata:
+      labels:
+        foo: bar
+    spec:
+      containers:
+        - name: kibana
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 0.5
+            limits:
+              memory: 2Gi
+              cpu: 1

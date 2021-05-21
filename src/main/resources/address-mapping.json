@@ -1,0 +1,61 @@
+{
+  "mappings": {
+    "_doc": {
+      "dynamic": "true",
+      "properties": {
+        "_entity_type": {
+          "type": "keyword",
+          "index": false
+        },
+        "flat_number": {
+          "type": "text",
+          "analyzer": "flat"
+        },
+        "flat_number_sort": {
+          "type": "keyword",
+          "normalizer": "sort"
+        },
+        "flat_type": {
+          "type": "text",
+          "analyzer": "flatType"
+        },
+        "flat_type_sort": {
+          "type": "keyword",
+          "normalizer": "sort"
+        },
+        "locality_name": {
+          "type": "text",
+          "analyzer": "suburb"
+        },
+        "locality_sort": {
+          "type": "keyword",
+          "normalizer": "sort"
+        },
+        "number_first": {
+          "type": "text",
+          "analyzer": "number"
+        },
+        "number_first_sort": {
+          "type": "keyword",
+          "normalizer": "sort"
+        },
+        "street_name": {
+          "type": "text",
+          "analyzer": "location"
+        },
+        "street_name_sort": {
+          "type": "keyword",
+          "normalizer": "sort"
+        },
+        "street_type_code": {
+          "type": "text",
+          "analyzer": "streetType"
+        },
+        "street_type_sort": {
+          "type": "keyword",
+          "doc_values": false
+        }
+      }
+    }
+  }
+}
