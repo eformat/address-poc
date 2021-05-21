@@ -3,6 +3,8 @@
   "query": {
     "match": {
       "address": {
+        "fuzziness": "AUTO",
+        "prefix_length": 1,
         "query": "23 crank street"
       }
     }
