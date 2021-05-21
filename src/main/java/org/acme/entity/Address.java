@@ -33,66 +33,100 @@ public class Address extends PanacheEntity implements Comparable {
         this.score = score;
     }
 
+    @KeywordField(searchable = Searchable.NO)
     public String address_detail_pid;
+    @KeywordField(searchable = Searchable.NO)
     public String street_locality_pid;
+    @KeywordField(searchable = Searchable.NO)
     public String locality_pid;
+    @KeywordField(searchable = Searchable.NO)
     public String building_name;
+    @KeywordField(searchable = Searchable.NO)
     public String lot_number_prefix;
+    @KeywordField(searchable = Searchable.NO)
     public String lot_number;
+    @KeywordField(searchable = Searchable.NO)
     public String lot_number_suffix;
 
     @FullTextField(analyzer = "flatType")
     @KeywordField(name = "flat_type_sort", searchable = Searchable.YES, sortable = Sortable.YES, normalizer = "sort")
     public String flat_type;
+
+    @KeywordField(searchable = Searchable.NO)
     public String flat_number_prefix;
 
     @FullTextField(analyzer = "flat")
     @KeywordField(name = "flat_number_sort", searchable = Searchable.YES, sortable = Sortable.YES, normalizer = "sort")
     public String flat_number;
 
+    @KeywordField(searchable = Searchable.NO)
     public String flat_number_suffix;
+    @KeywordField(searchable = Searchable.NO)
     public String level_type;
+    @KeywordField(searchable = Searchable.NO)
     public String level_number_prefix;
-    public Integer level_number;
+    @KeywordField(searchable = Searchable.NO)
+    public String level_number;
+    @KeywordField(searchable = Searchable.NO)
     public String level_number_suffix;
+    @KeywordField(searchable = Searchable.NO)
     public String number_first_prefix;
 
     @FullTextField(analyzer = "number")
     @KeywordField(name = "number_first_sort", searchable = Searchable.YES, sortable = Sortable.YES, normalizer = "sort")
     public String number_first;
 
+    @KeywordField(searchable = Searchable.NO)
     public String number_first_suffix;
+    @KeywordField(searchable = Searchable.NO)
     public String number_last_prefix;
-    public Integer number_last;
+    @KeywordField(searchable = Searchable.NO)
+    public String number_last;
+    @KeywordField(searchable = Searchable.NO)
     public String number_last_suffix;
 
     @FullTextField(analyzer = "location")
     @KeywordField(name = "street_name_sort", searchable = Searchable.YES, sortable = Sortable.YES, normalizer = "sort")
     public String street_name;
 
+    @KeywordField(searchable = Searchable.NO)
     public String street_class_code;
+    @KeywordField(searchable = Searchable.NO)
     public String street_class_type;
 
     @FullTextField(analyzer = "streetType")
     @KeywordField(name = "street_type_sort", searchable = Searchable.YES, sortable = Sortable.NO)
     public String street_type_code;
+
+    @KeywordField(searchable = Searchable.NO)
     public String street_suffix_code;
+    @KeywordField(searchable = Searchable.NO)
     public String street_suffix_type;
 
     @FullTextField(analyzer = "suburb")
     @KeywordField(name = "locality_sort", searchable = Searchable.YES, sortable = Sortable.YES, normalizer = "sort")
     public String locality_name;
 
+    @KeywordField(searchable = Searchable.NO)
     public String state_abbreviation;
+    @KeywordField(searchable = Searchable.NO)
     public String postcode;
-    public Double latitude;
-    public Double longitude;
+    @KeywordField(searchable = Searchable.NO)
+    public String latitude;
+    @KeywordField(searchable = Searchable.NO)
+    public String longitude;
+    @KeywordField(searchable = Searchable.NO)
     public String geocode_type;
-    public Integer confidence;
+    @KeywordField(searchable = Searchable.NO)
+    public String confidence;
+    @KeywordField(searchable = Searchable.NO)
     public String alias_principal;
+    @KeywordField(searchable = Searchable.NO)
     public String primary_secondary;
+    @KeywordField(searchable = Searchable.NO)
     public String legal_parcel_id;
-    public Date date_created;
+    @KeywordField(searchable = Searchable.NO)
+    public String date_created;
 
     @Override
     public boolean equals(Object o) {
