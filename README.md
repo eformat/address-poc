@@ -9,7 +9,7 @@ podman-compose up -d
 
 Run the app
 ```aidl
-mvn quarkus:dev
+mvn quarkus:dev -Dindex.recreate=true
 ```
 
 The Address format is from AUS GNAF Dataset 
