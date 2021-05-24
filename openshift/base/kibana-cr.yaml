@@ -3,7 +3,7 @@ apiVersion: kibana.k8s.elastic.co/v1
 kind: Kibana
 metadata:
   name: address
-  namespace: address-graphql
+  namespace: address-poc
 spec:
   count: 1
   elasticsearchRef:

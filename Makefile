@@ -1,6 +1,6 @@
 # Image URL to use all building/pushing image targets
 REGISTRY ?= quay.io
-REPOSITORY ?= $(REGISTRY)/eformat/address-graphql
+REPOSITORY ?= $(REGISTRY)/eformat/address-poc
 
 IMG := $(REPOSITORY):latest
 

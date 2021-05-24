@@ -6,7 +6,7 @@ metadata:
     common.k8s.elastic.co/type: kibana
     kibana.k8s.elastic.co/name: address
   name: address-kb-http
-  namespace: address-graphql
+  namespace: address-poc
 spec:
   port:
     targetPort: https

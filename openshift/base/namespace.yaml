@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: address-graphql
+  name: address-poc
 spec:
   finalizers:
     - kubernetes

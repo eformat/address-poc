@@ -3,7 +3,7 @@ apiVersion: elasticsearch.k8s.elastic.co/v1
 kind: Elasticsearch
 metadata:
   name: address
-  namespace: address-graphql
+  namespace: address-poc
 spec:
   http:
     tls:
