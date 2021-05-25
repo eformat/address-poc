@@ -66,8 +66,8 @@ public class Address extends PanacheEntity implements Comparable {
     public String level_type;
     @KeywordField(searchable = Searchable.NO)
     public String level_number_prefix;
-    @KeywordField(searchable = Searchable.NO)
-    public String level_number;
+    @GenericField(searchable = Searchable.NO)
+    public Integer level_number;
     @KeywordField(searchable = Searchable.NO)
     public String level_number_suffix;
     @KeywordField(searchable = Searchable.NO)
@@ -81,8 +81,8 @@ public class Address extends PanacheEntity implements Comparable {
     public String number_first_suffix;
     @KeywordField(searchable = Searchable.NO)
     public String number_last_prefix;
-    @KeywordField(searchable = Searchable.NO)
-    public String number_last;
+    @GenericField(searchable = Searchable.NO)
+    public Integer number_last;
     @KeywordField(searchable = Searchable.NO)
     public String number_last_suffix;
 
@@ -112,14 +112,14 @@ public class Address extends PanacheEntity implements Comparable {
     public String state_abbreviation;
     @KeywordField(searchable = Searchable.NO)
     public String postcode;
-    @KeywordField(searchable = Searchable.NO)
-    public String latitude;
-    @KeywordField(searchable = Searchable.NO)
-    public String longitude;
+    @GenericField(searchable = Searchable.NO)
+    public Double latitude;
+    @GenericField(searchable = Searchable.NO)
+    public Double longitude;
     @KeywordField(searchable = Searchable.NO)
     public String geocode_type;
-    @KeywordField(searchable = Searchable.NO)
-    public String confidence;
+    @GenericField(searchable = Searchable.NO)
+    public Integer confidence;
     @KeywordField(searchable = Searchable.NO)
     public String alias_principal;
     @KeywordField(searchable = Searchable.NO)
