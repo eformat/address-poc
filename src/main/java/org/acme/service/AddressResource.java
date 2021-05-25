@@ -79,7 +79,7 @@ public class AddressResource {
             _addJson(qJson, "suggest.address.prefix", search.toLowerCase());
             queryJson = qJson.encode();
         }
-        log.debug(">>> JSON " + queryJson);
+        log.info(">>> search request: " + queryJson);
         // make low level query request
         Request request = new Request(
                 "POST",
@@ -94,7 +94,7 @@ public class AddressResource {
             e.printStackTrace();
             return new ArrayList<>();
         }
-        log.debug(">>> search returned");
+        log.info(">>> search returned, took: " + json.getInteger("took") + " [ms]");
         return _processSearch(json);
     }
 
