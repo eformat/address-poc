@@ -1,6 +1,8 @@
 package org.acme.service;
 
 import io.quarkus.runtime.StartupEvent;
+import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.infrastructure.Infrastructure;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.acme.entity.Address;
@@ -77,7 +79,7 @@ public class AddressResource {
             _addJson(qJson, "suggest.address.prefix", search.toLowerCase());
             queryJson = qJson.encode();
         }
-        log.info(">>> JSON " + queryJson);
+        log.debug(">>> JSON " + queryJson);
         // make low level query request
         Request request = new Request(
                 "POST",
@@ -92,7 +94,7 @@ public class AddressResource {
             e.printStackTrace();
             return new ArrayList<>();
         }
-        log.info(">>> search returned");
+        log.debug(">>> search returned");
         return _processSearch(json);
     }
 
@@ -132,8 +134,10 @@ public class AddressResource {
     @Description("Search address by search term")
     public List<Address> address(@Name("search") String search, @Name("size") Optional<Integer> size) {
         String finalSearch = (search == null) ? "" : search.trim().toLowerCase();
-        log.info(">>> Final Search Words: finalSearch(" + finalSearch + ")");
-        return _fetchLowLevelClient(search, size.orElse(15));
+        log.debug(">>> Final Search Words: finalSearch(" + finalSearch + ")");
+        return Uni.createFrom().item(
+                _fetchLowLevelClient(search, size.orElse(15))
+        ).runSubscriptionOn(Infrastructure.getDefaultWorkerPool()).await().indefinitely();
     }
 
     public String _readFile(String fileName) {
