@@ -3,8 +3,8 @@ set datafile separator ","
 set datafile missing "NaN"
 set output "OUTPUTFILE.png"
 set title 'OUTPUTFILE'
-set xlabel "request"
-set ylabel "ms"
+set xlabel "request [#]"
+set ylabel "time [s]"
 set tics nomirror
 set grid
 plot "INPUTFILE.perfout" using (column(0)):($7==200?$1:NaN) with lines title "response-time", \

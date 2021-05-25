@@ -5,6 +5,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
@@ -125,8 +126,8 @@ public class Address extends PanacheEntity implements Comparable {
     public String primary_secondary;
     @KeywordField(searchable = Searchable.NO)
     public String legal_parcel_id;
-    @KeywordField(searchable = Searchable.NO)
-    public String date_created;
+    @GenericField(searchable = Searchable.NO)
+    public Date date_created;
 
     @Override
     public boolean equals(Object o) {
