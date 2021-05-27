@@ -1,7 +1,6 @@
 package org.acme.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
@@ -10,29 +9,12 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
 import javax.persistence.Entity;
-import javax.persistence.Transient;
-import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Objects;
 
-@Entity
+@Entity(name = "address")
 @Indexed
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Address extends PanacheEntity implements Comparable {
-
-    @FullTextField(analyzer = "address")
-    public String address;
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    @Transient
-    public BigDecimal score;
-
-    public void setScore(BigDecimal score) {
-        this.score = score;
-    }
+public class Address extends SearchableAddress implements Comparable {
 
     @KeywordField(searchable = Searchable.NO)
     public String address_detail_pid;

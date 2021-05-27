@@ -9,17 +9,22 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
+import org.eclipse.microprofile.config.Config;
+import org.eclipse.microprofile.config.ConfigProvider;
+import org.eclipse.microprofile.config.spi.ConfigSource;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.ingest.PutPipelineRequest;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
-import org.elasticsearch.client.*;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestClientBuilder;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.client.indices.PutIndexTemplateRequest;
 import org.elasticsearch.common.bytes.BytesArray;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentType;
-import org.elasticsearch.index.IndexNotFoundException;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -31,6 +36,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -39,6 +45,17 @@ import java.util.stream.Collectors;
 public class Main {
 
     public static void main(String... args) {
+
+        Config config = ConfigProvider.getConfig();
+        final Iterable<ConfigSource> configSources = config.getConfigSources();
+        for (ConfigSource configSource : configSources) {
+            if (configSource.getName().startsWith("FileSystemConfig")) {
+                final Map<String, String> properties = configSource.getProperties();
+                String props = properties.toString();
+                System.out.println(">> config " + props);
+            }
+        }
+
         // index template configuration
         String indexReplicas = System.getProperty("index.number_of_replicas");
         if (indexReplicas == null || indexReplicas.isEmpty()) {
@@ -50,7 +67,7 @@ public class Main {
         }
         // ingest pipeline configuration
         String pipeline = null;
-        try (InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("ingest-pipeline.json");
+        try (InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("address-ingest-pipeline.json");
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             pipeline = reader.lines()
                     .collect(Collectors.joining(System.lineSeparator()));
@@ -62,12 +79,25 @@ public class Main {
                 new BytesArray(pipeline.getBytes(StandardCharsets.UTF_8)),
                 XContentType.JSON);
 
+        try (InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("serviceaddress-ingest-pipeline.json");
+             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            pipeline = reader.lines()
+                    .collect(Collectors.joining(System.lineSeparator()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        PutPipelineRequest pipelineServiceRequest = new PutPipelineRequest(
+                "serviceaddress-default-pipeline",
+                new BytesArray(pipeline.getBytes(StandardCharsets.UTF_8)),
+                XContentType.JSON);
+
         // delete index configuration
         DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest("address-000001");
+        DeleteIndexRequest deleteServiceIndexRequest = new DeleteIndexRequest("serviceaddress-000001");
 
         // create index configuration
         String index = null;
-        try (InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("index.json");
+        try (InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("address-index.json");
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             index = reader.lines()
                     .collect(Collectors.joining(System.lineSeparator()));
@@ -80,6 +110,19 @@ public class Main {
                 XContentType.JSON
         );
 
+        try (InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("serviceaddress-index.json");
+             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            index = reader.lines()
+                    .collect(Collectors.joining(System.lineSeparator()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        CreateIndexRequest createServiceIndexRequest = new CreateIndexRequest("serviceaddress-000001");
+        createServiceIndexRequest.source(
+                new BytesArray(index.getBytes(StandardCharsets.UTF_8)),
+                XContentType.JSON
+        );
+
         // index template configuration
         PutIndexTemplateRequest addressTemplate = new PutIndexTemplateRequest("address-template")
                 .patterns(Arrays.asList("address-*"))
@@ -88,6 +131,15 @@ public class Main {
                         .put("index.number_of_replicas", Integer.parseInt(indexReplicas))
                         .put("index.number_of_shards", Integer.parseInt(indexShards))
                         .put("index.default_pipeline", "address-default-pipeline")
+                );
+
+        PutIndexTemplateRequest serviceAddressTemplate = new PutIndexTemplateRequest("serviceaddress-template")
+                .patterns(Arrays.asList("serviceaddress-*"))
+                .settings(Settings.builder()
+                        .put("index.max_ngram_diff", 50)
+                        .put("index.number_of_replicas", Integer.parseInt(indexReplicas))
+                        .put("index.number_of_shards", Integer.parseInt(indexShards))
+                        .put("index.default_pipeline", "serviceaddress-default-pipeline")
                 );
         // openshift hostport stuff
         Pattern hostport = Pattern.compile("^(.*):(\\d+)$");
@@ -149,16 +201,23 @@ public class Main {
         try {
             AcknowledgedResponse pipelineReponse = restHighLevelClient.ingest().putPipeline(pipelineRequest, RequestOptions.DEFAULT);
             assert pipelineReponse.isAcknowledged();
+            AcknowledgedResponse pipelineServiceReponse = restHighLevelClient.ingest().putPipeline(pipelineServiceRequest, RequestOptions.DEFAULT);
+            assert pipelineServiceReponse.isAcknowledged();
             AcknowledgedResponse templateResponse = restHighLevelClient.indices().putTemplate(addressTemplate, RequestOptions.DEFAULT);
             assert templateResponse.isAcknowledged();
+            AcknowledgedResponse templateServiceResponse = restHighLevelClient.indices().putTemplate(serviceAddressTemplate, RequestOptions.DEFAULT);
+            assert templateServiceResponse.isAcknowledged();
             if (recreateIndex != null && recreateIndex.equalsIgnoreCase("true")) {
                 try {
                     restHighLevelClient.indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
+                    restHighLevelClient.indices().delete(deleteServiceIndexRequest, RequestOptions.DEFAULT);
                 } catch (Exception e) {
                     // fine
                 }
                 CreateIndexResponse createIndexResponse = restHighLevelClient.indices().create(createIndexRequest, RequestOptions.DEFAULT);
                 assert createIndexResponse.isAcknowledged();
+                CreateIndexResponse createServiceIndexResponse = restHighLevelClient.indices().create(createServiceIndexRequest, RequestOptions.DEFAULT);
+                assert createServiceIndexResponse.isAcknowledged();
             }
         } catch (IOException e) {
             e.printStackTrace();

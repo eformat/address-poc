@@ -1,5 +1,8 @@
 package org.acme.service;
 
+import org.acme.entity.Address;
+import org.acme.entity.SearchableAddress;
+import org.acme.entity.ServiceAddress;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequest;
@@ -193,7 +196,7 @@ public class IndexResource {
     @Path("/massIndex/{numDocs}")
     @Operation(operationId = "massIndex", summary = "mass index documents", description = "This operation starts the mass indexer", deprecated = false, hidden = false)
     public Response massIndex(@PathParam("numDocs") @DefaultValue("20000") Integer numDocs) throws InterruptedException {
-        searchSession.massIndexer()
+        searchSession.massIndexer(Address.class, ServiceAddress.class)
                 .batchSizeToLoadObjects(numDocs)
                 .startAndWait();
         return Response.ok().build();

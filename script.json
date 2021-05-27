@@ -1,101 +1,105 @@
 GET _cat/indices?h=index&s=index
 GET _cat/aliases
 
+DELETE /address-000002/_alias/address-read
+DELETE /address-000002/_alias/address-write
 
 DELETE address-000001
-PUT address-000001?include_type_name=true
+
+# ?include_type_name=true
+
+PUT address-000001
 {
   "settings": {
-      "analysis": {
-        "filter": {
-          "ngram": {
-            "type": "ngram",
-            "min_gram": "2",
-            "max_gram": "6"
-          }
+    "analysis": {
+      "filter": {
+        "ngram": {
+          "type": "ngram",
+          "min_gram": "2",
+          "max_gram": "6"
+        }
+      },
+      "normalizer": {
+        "sort": {
+          "filter": [
+            "asciifolding",
+            "lowercase"
+          ],
+          "type": "custom"
+        }
+      },
+      "analyzer": {
+        "number": {
+          "filter": [
+            "asciifolding",
+            "lowercase"
+          ],
+          "type": "custom",
+          "tokenizer": "standard"
         },
-        "normalizer": {
-          "sort": {
-            "filter": [
-              "asciifolding",
-              "lowercase"
-            ],
-            "type": "custom"
-          }
+        "flatType": {
+          "filter": [
+            "asciifolding",
+            "lowercase"
+          ],
+          "type": "custom",
+          "tokenizer": "standard"
         },
-        "analyzer": {
-          "number": {
-            "filter": [
-              "asciifolding",
-              "lowercase"
-            ],
-            "type": "custom",
-            "tokenizer": "standard"
-          },
-          "flatType": {
-            "filter": [
-              "asciifolding",
-              "lowercase"
-            ],
-            "type": "custom",
-            "tokenizer": "standard"
-          },
-          "streetType": {
-            "filter": [
-              "asciifolding",
-              "lowercase"
-            ],
-            "type": "custom",
-            "tokenizer": "standard"
-          },
-          "address": {
-            "filter": [
-              "asciifolding",
-              "lowercase",
-              "ngram"
-            ],
-            "type": "custom",
-            "tokenizer": "whitespace"
-          },
-          "flat": {
-            "filter": [
-              "asciifolding",
-              "lowercase"
-            ],
-            "type": "custom",
-            "tokenizer": "standard"
-          },
-          "suburb": {
-            "filter": [
-              "asciifolding",
-              "lowercase",
-              "ngram"
-            ],
-            "type": "custom",
-            "tokenizer": "standard"
-          },
-          "location": {
-            "filter": [
-              "asciifolding",
-              "lowercase",
-              "ngram"
-            ],
-            "type": "custom",
-            "tokenizer": "standard"
-          },
-          "whitespace": {
-            "filter": [
-              "asciifolding",
-              "lowercase"
-            ],
-            "type": "custom",
-            "tokenizer": "whitespace"
-          }
+        "streetType": {
+          "filter": [
+            "asciifolding",
+            "lowercase"
+          ],
+          "type": "custom",
+          "tokenizer": "standard"
+        },
+        "address": {
+          "filter": [
+            "asciifolding",
+            "lowercase",
+            "ngram"
+          ],
+          "type": "custom",
+          "tokenizer": "whitespace"
+        },
+        "flat": {
+          "filter": [
+            "asciifolding",
+            "lowercase"
+          ],
+          "type": "custom",
+          "tokenizer": "standard"
+        },
+        "suburb": {
+          "filter": [
+            "asciifolding",
+            "lowercase",
+            "ngram"
+          ],
+          "type": "custom",
+          "tokenizer": "standard"
+        },
+        "location": {
+          "filter": [
+            "asciifolding",
+            "lowercase",
+            "ngram"
+          ],
+          "type": "custom",
+          "tokenizer": "standard"
+        },
+        "whitespace": {
+          "filter": [
+            "asciifolding",
+            "lowercase"
+          ],
+          "type": "custom",
+          "tokenizer": "whitespace"
         }
       }
+    }
   },
   "mappings": {
-    "_doc": {
       "dynamic": "true",
       "properties": {
         "_entity_type": {
@@ -112,7 +116,7 @@ PUT address-000001?include_type_name=true
           "preserve_separators": true,
           "preserve_position_increments": true,
           "max_input_length": 50
-        },         
+        },
         "flat_number": {
           "type": "text",
           "analyzer": "flat"
@@ -162,6 +166,13 @@ PUT address-000001?include_type_name=true
           "doc_values": false
         }
       }
+  },
+  "aliases" : {
+    "address-write" : {
+      "is_write_index": true
+    },
+    "address-read" : {
+      "is_write_index": false
     }
   }
 }
@@ -186,7 +197,8 @@ POST /_aliases
   ]
 }
 
-DELETE /oneaddress-000001/_alias/address-read
+DELETE /address-000002/_alias/address-read
+DELETE /address-000002/_alias/address-write
 
 POST /_aliases
 {
@@ -229,7 +241,17 @@ GET address-000001/_search
     }
 }
 
-
+GET address-000001/_search
+{
+  "suggest": {
+    "address": {
+      "prefix": "33 crank",
+      "completion": {
+        "field": "address_suggest"
+      }
+    }
+  }
+}
 
 
 DELETE concat_address_example

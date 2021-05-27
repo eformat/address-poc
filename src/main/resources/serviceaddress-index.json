@@ -1,0 +1,339 @@
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        "ngram": {
+          "type": "ngram",
+          "min_gram": "2",
+          "max_gram": "6"
+        }
+      },
+      "normalizer": {
+        "sort": {
+          "filter": [
+            "asciifolding",
+            "lowercase"
+          ],
+          "type": "custom"
+        }
+      },
+      "analyzer": {
+        "address": {
+          "filter": [
+            "asciifolding",
+            "lowercase",
+            "ngram"
+          ],
+          "type": "custom",
+          "tokenizer": "whitespace"
+        },
+        "whitespace": {
+          "filter": [
+            "asciifolding",
+            "lowercase"
+          ],
+          "type": "custom",
+          "tokenizer": "whitespace"
+        }
+      }
+    }
+  },
+  "mappings": {
+      "dynamic": "true",
+      "properties": {
+        "address": {
+          "type": "text",
+          "analyzer": "address"
+        },
+        "address_suggest": {
+          "type": "completion",
+          "analyzer": "whitespace",
+          "preserve_separators": true,
+          "preserve_position_increments": true,
+          "max_input_length": 50
+        },
+        "ADDR_TYPE": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "AUTO_CREATED": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "AUTO_CREATED_REASON": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "BUILDING_ASSOCIATION": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "BUILDING_TYPE": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "CITY_LOCALITY": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "CITY_NAME": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "COMPLEX_ADDR_TYPE": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "COMPLEX_NAME": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "DENSITY_ZONE": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "FORMAT": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "HABITATION_NAME": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "HOUSE_HIGH": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "HOUSE_HIGH_SUFFIX": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "HOUSE_LOW": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "HOUSE_LOW_SUFFIX": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "IN_USE_TYPE": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "IS_RESIDENTIAL": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "LATEST_ALPHA_DATA_SOURCE": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "LATEST_SPATIAL_DATA_SOURCE": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "LEVEL_NUMBER": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "LEVEL_TYPE": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "LOCALITY_TYPE": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "LOCATION_CODE": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "MESHBLOCK_ID": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "NAME_STATUS": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "NAME_TYPE": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "NZAMSUFI": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "PARCEL_ID": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "PLSAM": {
+          "type": "integer",
+          "index": false,
+          "doc_values": false
+        },
+        "POSITION_TYPE": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "POSTCODE_ZONE": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "RD_SEG_RENAMED_INDICATOR": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "RD_SEG_SIDE": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "REGION": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "REGION_NAME": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "SERVICE_LOCATION_ID": {
+          "type": "integer",
+          "index": false,
+          "doc_values": false
+        },
+        "SITE_CODE": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "STREET_DIRECTION": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "STREET_NAME": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "STREET_TYPE": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "SUBURB": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "SUFFIX_ABBREV": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "TA_CODE": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "TLC": {
+          "type": "integer",
+          "index": false,
+          "doc_values": false
+        },
+        "TOWN_TYPE": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "TUI": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "TYPE_ABBREV": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "UNIT_IDENTIFIER_HIGH": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "UNIT_IDENTIFIER_LOW": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "UNIT_TYPE": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "VUI": {
+          "type": "keyword",
+          "index": false,
+          "doc_values": false
+        },
+        "WGS84_LAT": {
+          "type": "double",
+          "index": false,
+          "doc_values": false
+        },
+        "WGS84_LONG": {
+          "type": "double",
+          "index": false,
+          "doc_values": false
+        },
+        "_entity_type": {
+          "type": "keyword",
+          "index": false
+        }
+      }
+  },
+  "aliases" : {
+    "serviceaddress-write" : {
+      "is_write_index": true
+    },
+    "serviceaddress-read" : {
+      "is_write_index": false
+    }
+  }
+}
