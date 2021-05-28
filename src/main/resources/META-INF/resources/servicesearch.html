@@ -91,7 +91,7 @@ function filterFunction() {
 
   $.post(url, data, function(data, status) {
     add = Object.values(data);
-    aAdd = add[0].address;
+    aAdd = add[0].serviceaddress;
     //console.log(JSON.stringify(aAdd) + " and status is " + status)
 
     div = document.getElementById("myDropdown");

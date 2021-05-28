@@ -15,13 +15,6 @@ public class SearchableAddress extends PanacheEntity {
     public SearchableAddress() {}
 
     @Transient
-    public String address;
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    @Transient
     public BigDecimal score;
 
     public void setScore(BigDecimal score) {

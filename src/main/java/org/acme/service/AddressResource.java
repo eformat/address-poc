@@ -4,7 +4,6 @@ import io.quarkus.runtime.StartupEvent;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.acme.entity.Address;
-import org.acme.entity.SearchableAddress;
 import org.acme.entity.ServiceAddress;
 import org.apache.http.util.EntityUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -91,7 +90,7 @@ public class AddressResource {
             _addJson(query, "suggest.address.completion.field", "address_suggest");
             queryJson = query.encode();
         } else {
-            queryJson = _readFile("/query-suggest-match.json");
+            queryJson = _readFile("/address-query-suggest-match.json");
             JsonObject qJson = new JsonObject(queryJson);
             _addJson(qJson, "size", size.toString());
             _addJson(qJson, "query.match.address.query", search.toLowerCase());
@@ -126,7 +125,7 @@ public class AddressResource {
             _addJson(query, "suggest.address.completion.field", "address_suggest");
             queryJson = query.encode();
         } else {
-            queryJson = _readFile("/query-suggest-match.json");
+            queryJson = _readFile("/address-query-suggest-match.json");
             JsonObject qJson = new JsonObject(queryJson);
             _addJson(qJson, "size", size.toString());
             _addJson(qJson, "query.match.address.query", search.toLowerCase());

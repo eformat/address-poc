@@ -17,6 +17,13 @@ import java.util.Date;
 public class Address extends SearchableAddress implements Comparable {
 
     @KeywordField(searchable = Searchable.NO)
+    public String address;
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    @KeywordField(searchable = Searchable.NO)
     public String address_detail_pid;
     @KeywordField(searchable = Searchable.NO)
     public String street_locality_pid;

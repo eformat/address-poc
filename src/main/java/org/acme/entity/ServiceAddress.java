@@ -7,120 +7,128 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericFie
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 
 @Entity(name = "serviceaddress")
 @Indexed
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ServiceAddress extends SearchableAddress implements Comparable {
 
+    @Transient
+    public String address;
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     @GenericField(searchable = Searchable.NO)
-    public String SERVICE_LOCATION_ID;
+    public String service_location_id;
     @GenericField(searchable = Searchable.NO)
-    public String TUI;
+    public String tui;
     @GenericField(searchable = Searchable.NO)
-    public String VUI;
+    public String vui;
     @GenericField(searchable = Searchable.NO)
-    public String TLC;
+    public String tlc;
     @GenericField(searchable = Searchable.NO)
-    public String PLSAM;
+    public String plsam;
     @GenericField(searchable = Searchable.NO)
-    public Double WGS84_LAT;
+    public Double wgs84_lat;
     @GenericField(searchable = Searchable.NO)
-    public Double WGS84_LONG;
+    public Double wgs84_long;
     @GenericField(searchable = Searchable.NO)
-    public String IN_USE_TYPE;
+    public String in_use_type;
     @GenericField(searchable = Searchable.NO)
-    public String ADDR_TYPE;
+    public String addr_type;
     @GenericField(searchable = Searchable.NO)
-    public String UNIT_TYPE;
+    public String unit_type;
     @GenericField(searchable = Searchable.NO)
-    public String UNIT_IDENTIFIER_LOW;
+    public String unit_identifier_low;
     @GenericField(searchable = Searchable.NO)
-    public String UNIT_IDENTIFIER_HIGH;
+    public String unit_identifier_high;
     @GenericField(searchable = Searchable.NO)
-    public String HOUSE_LOW;
+    public String house_low;
     @GenericField(searchable = Searchable.NO)
-    public String HOUSE_LOW_SUFFIX;
+    public String house_low_suffix;
     @GenericField(searchable = Searchable.NO)
-    public String HOUSE_HIGH;
+    public String house_high;
     @GenericField(searchable = Searchable.NO)
-    public String HOUSE_HIGH_SUFFIX;
+    public String house_high_suffix;
     @GenericField(searchable = Searchable.NO)
-    public String LEVEL_TYPE;
+    public String level_type;
     @GenericField(searchable = Searchable.NO)
-    public String LEVEL_NUMBER;
+    public String level_number;
     @GenericField(searchable = Searchable.NO)
-    public String STREET_NAME;
+    public String street_name;
     @GenericField(searchable = Searchable.NO)
-    public String STREET_TYPE;
+    public String street_type;
     @GenericField(searchable = Searchable.NO)
-    public String STREET_DIRECTION;
+    public String street_direction;
     @GenericField(searchable = Searchable.NO)
-    public String HABITATION_NAME;
+    public String habitation_name;
     @GenericField(searchable = Searchable.NO)
-    public String LOCALITY_TYPE;
+    public String locality_type;
     @GenericField(searchable = Searchable.NO)
-    public String SUBURB;
+    public String suburb;
     @GenericField(searchable = Searchable.NO)
-    public String CITY_NAME;
+    public String city_name;
     @GenericField(searchable = Searchable.NO)
-    public String CITY_LOCALITY;
+    public String city_locality;
     @GenericField(searchable = Searchable.NO)
-    public String REGION;
+    public String region;
     @GenericField(searchable = Searchable.NO)
-    public String POSTCODE_ZONE;
+    public String postcode_zone;
     @GenericField(searchable = Searchable.NO)
-    public String POSITION_TYPE;
+    public String position_type;
     @GenericField(searchable = Searchable.NO)
-    public String FORMAT;
+    public String format;
     @GenericField(searchable = Searchable.NO)
-    public String LATEST_ALPHA_DATA_SOURCE;
+    public String latest_alpha_data_source;
     @GenericField(searchable = Searchable.NO)
-    public String NZAMSUFI;
+    public String nzamsufi;
     @GenericField(searchable = Searchable.NO)
-    public String IS_RESIDENTIAL;
+    public String is_residential;
     @GenericField(searchable = Searchable.NO)
-    public String RD_SEG_SIDE;
+    public String rd_seg_side;
     @GenericField(searchable = Searchable.NO)
-    public String LATEST_SPATIAL_DATA_SOURCE;
+    public String latest_spatial_data_source;
     @GenericField(searchable = Searchable.NO)
-    public String AUTO_CREATED;
+    public String auto_created;
     @GenericField(searchable = Searchable.NO)
-    public String AUTO_CREATED_REASON;
+    public String auto_created_reason;
     @GenericField(searchable = Searchable.NO)
-    public String BUILDING_ASSOCIATION;
+    public String building_association;
     @GenericField(searchable = Searchable.NO)
-    public String TOWN_TYPE;
+    public String town_type;
     @GenericField(searchable = Searchable.NO)
-    public String COMPLEX_ADDR_TYPE;
+    public String complex_addr_type;
     @GenericField(searchable = Searchable.NO)
-    public String COMPLEX_NAME;
+    public String complex_name;
     @GenericField(searchable = Searchable.NO)
-    public String TA_CODE;
+    public String ta_code;
     @GenericField(searchable = Searchable.NO)
-    public String REGION_NAME;
+    public String region_name;
     @GenericField(searchable = Searchable.NO)
-    public String MESHBLOCK_ID;
+    public String meshblock_id;
     @GenericField(searchable = Searchable.NO)
-    public String NAME_TYPE;
+    public String name_type;
     @GenericField(searchable = Searchable.NO)
-    public String SUFFIX_ABBREV;
+    public String suffix_abbrev;
     @GenericField(searchable = Searchable.NO)
-    public String NAME_STATUS;
+    public String name_status;
     @GenericField(searchable = Searchable.NO)
-    public String RD_SEG_RENAMED_INDICATOR;
+    public String rd_seg_renamed_indicator;
     @GenericField(searchable = Searchable.NO)
-    public String TYPE_ABBREV;
+    public String type_abbrev;
     @GenericField(searchable = Searchable.NO)
-    public String BUILDING_TYPE;
+    public String building_type;
     @GenericField(searchable = Searchable.NO)
-    public String SITE_CODE;
+    public String site_code;
     @GenericField(searchable = Searchable.NO)
-    public String LOCATION_CODE;
+    public String location_code;
     @GenericField(searchable = Searchable.NO)
-    public String PARCEL_ID;
+    public String parcel_id;
     @GenericField(searchable = Searchable.NO)
-    public String DENSITY_ZONE;
+    public String density_zone;
 
     @Override
     public boolean equals(Object o) {
