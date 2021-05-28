@@ -7,19 +7,11 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericFie
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 import javax.persistence.Entity;
-import javax.persistence.Transient;
 
 @Entity(name = "serviceaddress")
 @Indexed
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ServiceAddress extends SearchableAddress implements Comparable {
-
-    @Transient
-    public String address;
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 
     @GenericField(searchable = Searchable.NO)
     public String service_location_id;

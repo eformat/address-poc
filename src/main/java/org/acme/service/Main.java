@@ -210,6 +210,10 @@ public class Main {
             if (recreateIndex != null && recreateIndex.equalsIgnoreCase("true")) {
                 try {
                     restHighLevelClient.indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
+                } catch (Exception e) {
+                    // fine
+                }
+                try {
                     restHighLevelClient.indices().delete(deleteServiceIndexRequest, RequestOptions.DEFAULT);
                 } catch (Exception e) {
                     // fine
